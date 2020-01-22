@@ -196,6 +196,13 @@ Setup
     Enable Device    ${olt_device_id}
     Wait Until Keyword Succeeds    ${timeout}    5s
     ...    Validate OLT Device    ENABLED    ACTIVE    REACHABLE    ${olt_serial_number}
+    FOR    ${I}    IN RANGE    0    ${num_onus}
+	${src}=    Set Variable    ${hosts.src[${I}]}
+        ${dst}=    Set Variable    ${hosts.dst[${I}]}
+        Run Keyword And Continue On Failure    Wait Until Keyword Succeeds    ${timeout}    5s
+        ...    Validate Device    ENABLED    ACTIVE    REACHABLE
+        ...    ${src['onu']}    onu=True    onu_reason=omci-flows-pushed
+    END
     ${logical_id}=    Get Logical Device ID From SN    ${olt_serial_number}
     Set Suite Variable    ${logical_id}
 
